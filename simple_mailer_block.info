@@ -1,4 +1,5 @@
 name = Simple Mailer Block
 description = My first attempt to write something for drupal.
+package = SRM.gr Modules
 core = 7.x
-package = SRM
+dependencies = block

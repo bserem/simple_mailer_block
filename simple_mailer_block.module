@@ -1,42 +1,85 @@
 <?php
 
-  function simple_mailer_block_block_info() {
-    $blocks['mailerblock_text'] = array(
-      'info' => t('Mailerblock: TEXT'),
-      'cache' => DRUPAL_NO_CACHE,
-    );
+/**
+ * @file
+ * Module file for simple_mailer_block
+*/
 
-    $blocks['mailerblock_mail'] = array(
-      'info' => t('Mailerblock: e-mail'),
-      'cache' => DRUPAL_NO_CACHE,
-    );
+//Make the two blocks appear on the blocks administration page.
+//One blocks is for simple text and one is for email addresses.
+function simple_mailer_block_block_info() {
+  $blocks['mailerblock_text'] = array(
+    'info' => t('Mailerblock: TEXT'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
 
-    return $blocks;
-  }
+  $blocks['mailerblock_mail'] = array(
+    'info' => t('Mailerblock: e-mail'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
 
-  function simple_mailer_block_block_view($delta = 'mailerblock_text') {
-    $block = array();
+  return $blocks;
+}
 
-    switch ($delta) {
-      case 'mailerblock_text':
-        $block['subject'] = t('Send a message');
-        $block['content'] = 'THIS IS THE OUTPUT';
+//The contents of the blocks. Simple HTML forms will do the job but MUST be
+//replaced with forms made by the FormAPI.
+function simple_mailer_block_block_view($delta) {
+  $block = array();
 
-        break;
+  switch ($delta) {
+    case 'mailerblock_text':
+      $block['subject'] = t('Send a message');
+      $block['content'] = simple_mailer_block_contents($delta);
+      break;
 
-      case 'mailerblock_mail':
-        $block['subject'] = t('Write your email');
-        $block['content'] = <<<FORM
-<form method="GET" action="/subscribe">
+    case 'mailerblock_mail':
+      $block['subject'] = t('Subscribe');
+      $block['content'] = simple_mailer_block_contents($delta);
+/*      $block['content'] = <<<FORM
+<form method="GET" action="simplemailer/subscribe">
 <input type="text" name="email" class="textbox" />
 <input type="submit" />
 </form>
-FORM;
-
-        break;
-    }
-
-    return $block;
+FORM;*/
+       break;
   }
 
-?>
+  return $block;
+}
+
+function simple_mailer_block_contents($which_block) {
+  switch ($which_block) {
+    case 'mailerblock_text':
+      $block_contents['markup'] = array(
+        '#markup' => 'Type your message and press Send',
+      );
+      $block_contents['form'] = array(
+        '#type' => 'textarea',
+        '#rows' => 3,
+        '#value' => '',
+      );
+      $block_contents['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Send'),
+      );
+      return $block_contents;
+    case 'mailerblock_mail':
+      $block_contents['form'] = array(
+        '#type' => 'textfield',
+        '#title' => t('e-mail address:'),
+        '#size' => 20,
+      );
+      $block_contents['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Subscribe'),
+      );
+      return $block_contents;
+    }
+}
+
+function simple_mailer_block_menu() {
+  $items['simplemailer/subscribe'] = array(
+    'title' => 'SUBSCRIBE',
+  );
+  return $items;
+}
