@@ -1,0 +1,8 @@
+This module creates two blocks that ask for the user to enter some text or his
+email address and upon submittion the datais send to a specified e-mail address.
+
+They could be used as quick-messagebox (ie for studios) or as simple block for
+e-mail subscriptions.
+
+This is my first Drupal module ever, so it is quite simple.
+Additions are welcomed of course!

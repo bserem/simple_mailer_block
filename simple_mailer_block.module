@@ -1,0 +1,42 @@
+<?php
+
+  function simple_mailer_block_block_info() {
+    $blocks['mailerblock_text'] = array(
+      'info' => t('Mailerblock: TEXT'),
+      'cache' => DRUPAL_NO_CACHE,
+    );
+
+    $blocks['mailerblock_mail'] = array(
+      'info' => t('Mailerblock: e-mail'),
+      'cache' => DRUPAL_NO_CACHE,
+    );
+
+    return $blocks;
+  }
+
+  function simple_mailer_block_block_view($delta = 'mailerblock_text') {
+    $block = array();
+
+    switch ($delta) {
+      case 'mailerblock_text':
+        $block['subject'] = t('Send a message');
+        $block['content'] = 'THIS IS THE OUTPUT';
+
+        break;
+
+      case 'mailerblock_mail':
+        $block['subject'] = t('Write your email');
+        $block['content'] = <<<FORM
+<form method="GET" action="/subscribe">
+<input type="text" name="email" class="textbox" />
+<input type="submit" />
+</form>
+FORM;
+
+        break;
+    }
+
+    return $block;
+  }
+
+?>
